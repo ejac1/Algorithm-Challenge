@@ -1,0 +1,150 @@
+"""
+
+This is a text game where the user will escape a room by finding 
+two keys.
+Each decision will prompt the user to choose between 2-3 options.
+Depending on what order the user finds certain objects, the printed
+dialogue will change slightly.
+
+"""
+
+
+#These variables will change based on what order the user finds/does certain things
+
+seenBlueDoor = 0
+seenBox = 0
+silverKey = 0
+emptyDrawer = 0
+notOpen = 0
+blueKey = 0
+mistake = 0
+
+
+#This is where the game begins for the user.
+#They choose between two doors, but only the orange one is open.
+
+print("You trapped in a room with two doors in front of you. The first is blue, the second is orange.")
+door = input("Which door do you open? ('blue' or 'orange'): ")
+if door == "blue":
+    print("This door is locked. You go through the second door.")
+    seenBlueDoor = 1
+elif door == "orange":
+    print("You go through the second door into the next room.")
+else:
+    print("Invalid input. I'll choose for you then; you go through the orange door!")
+    mistake = 1
+
+print()
+
+
+#In the orange room they choose between a dresser and a box. 
+#The box is locked, so both options direct the user to the drawer.
+
+room = input("In the orange room there is a dresser and a box. Which do you look at first? (type 'dresser' or 'box'): ")
+if room == "box":
+    print("The box has a silver lock on it. You'll need a key.") 
+    seenBox = 1
+elif room == "dresser":
+    print("The dresser has three drawers.")
+elif room != "box" and room != "dresser" and mistake == 1:
+    print("Invalid input twice in a row. Are you a bad typer? Whatever, just go to the dresser.")
+    mistake = 2
+else: 
+    print("Invalid input. I'll choose for you then; go to the dresser.")
+    mistake = 1
+
+print()
+
+
+#Now the user is prompted to open a drawer. If they choose 1, they get the key
+#If they have seen the box already, seenBox will be at 1 instead of 0, meaning the dialogue will be a little different
+#The other drawers are empty.
+
+if seenBox == 1:
+    print("You go to the dresser. It has three drawers.")
+
+drawer = int(input("Which drawer do you open? (1, 2, or 3): "))
+if drawer == 1 and seenBox == 1:
+    print("You open the first drawer. It has a silver key!")
+    silverKey = 1
+elif drawer == 1 and seenBox == 0:
+    print("You open the first drawer. It has a silver key.")
+elif drawer == 2:
+    print("You open the third drawer. It is empty.")
+    emptyDrawer = 1
+elif drawer == 3:
+    print("You open the second drawer. It is empty.")
+    emptyDrawer = 1
+elif drawer != 1 and drawer != 2 and drawer != 3 and mistake == 1:
+    print("Invalid input again? Fine, you find a silver key in the first drawer or whatever.")
+    mistake = 2
+    silverKey = 1
+elif drawer != 1 and drawer != 2 and drawer != 3 and mistake == 2:
+    print("Seriously? Three invalid inputs! Don't bother opening a drawer, you clearly lack the ability to move your fingers properly, just take the silver key!")
+    mistake = 3
+    silverKey = 1
+else:
+    print("Inavlid input. I'll choose for you, then; you open the first drawer and find a silver key.")
+    silverKey = 1
+    
+print()
+
+
+#If you got an empty drawer, this dialogue says you open the other drawers and find a key.
+#This doesn't appear if you opened the first box (emptyDrawer=0)
+#If you chose the box originally, the dialogue is slightly different
+
+if emptyDrawer == 1 and seenBox == 1:
+    print("You try the other two drawers. Within the first one you find the key!")
+    silverKey = 1
+elif emptyDrawer == 1 and seenBox == 0:
+    print("You try the other two drawers. Within the first one you find a key.")
+    silverKey = 1
+
+print()
+
+
+#Once you have the key (silverKey = 1), you go to the box
+#If you originally chose the box, the dialogue is slightly different
+
+if seenBox == 0 and silverKey == 1:
+    print("You go over to the box. It has a silver lock.")
+elif seenBox == 1 and silverKey == 1:
+    print("You return to the box with your key.")
+
+
+#Program prompts user if they want to open the box. 
+#Regardless of their choice they will be directed to open the box.
+#Once the box is open, they will gain a blue key (blueKey=1)
+
+unlockBox = input("Do you use the key on the lock? (yes/no): ")
+if unlockBox == "yes":
+    print("The box opens! There is a blue key inside.")
+    blueKey = 1
+elif unlockBox == "no":
+    print("You sit in the room contemplating how you've gotten there. It's like you want to be trapped! I'll just open the box for you. Oh look, a blue key.")
+    blueKey = 1
+elif unlockBox != "yes" and unlockBox != "yes" and mistake == 3:
+    print("INVALID INPUT! It's like you want to be trapped here. If you won't open it, I will! There's a blue key inside the box.")
+    blueKey = 1
+else:
+    print("Invalid input, so I'm choosing. You open the box to find a blue key within.")
+    blueKey = 1
+    
+print()
+
+
+#Once they have the blue key (blueKey=1) the program will direct the user to open the blue door
+#If the user chose the blue door originally, the dialogue will be slightly different
+
+if blueKey == 1 and seenBlueDoor == 1:
+    print("You remember the blue door was locked, so you bring the blue key over to it.")
+    openBlue = "yes"
+elif blueKey == 1 and seenBlueDoor == 0:
+    print("You remember the only other blue thing you've seen was that door at the beginning. You bring the blue key to it. The door appears to have been locked this whole time.")
+    openBlue = "yes"
+    
+print()
+
+if openBlue == "yes":
+    print("You unlock the blue door. You've escaped the room!")
